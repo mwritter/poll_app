@@ -4,18 +4,28 @@ import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
-  const routes = [
+const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home
   },
   {
-    path: '/poll',
+    path: '/poll/:poll_id',
     name: 'Poll',
     props: true,
     component: () => import('../views/Poll.vue')
   },
+  {
+    path: '/new_poll',
+    name: 'NewPoll',
+    props: true,
+    component: () => import('../views/NewPoll.vue')
+  },
+  {
+    path: '*',
+    redirect: '/'
+  }
   // {
   //   path: '/about',
   //   name: 'About',

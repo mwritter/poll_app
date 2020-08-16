@@ -2,10 +2,11 @@
   <div id="app">
     <div id="top-bar">
       <router-link to="/">
-      Poll<strong>App</strong>
+        Poll
+        <strong>App</strong>
       </router-link>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -44,10 +45,9 @@ main {
   margin: 0 1rem;
 }
 
-#top-bar a {
+a {
   text-decoration: none;
   color: #2c3e50;
   cursor: pointer;
 }
-
 </style>

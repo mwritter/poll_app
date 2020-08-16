@@ -1,25 +1,33 @@
 <template>
   <main id="home">
     <div id="poll-id-input-div">
-      <input @keyup.enter="getPoll" id="poll-id-input" type="text" placeholder="what's the poll id" />
+      <input
+        @keyup.enter="showPoll"
+        autocomplete="off"
+        id="poll-id-input"
+        type="text"
+        placeholder="what's the poll id"
+        v-model="poll_id"
+      />
     </div>
-    <div id="start-new-poll">start a new poll</div>
+    <router-link to="/new_poll">
+      <div id="start-new-poll">start a new poll</div>
+    </router-link>
   </main>
 </template>
 
 <script>
-import db from "../db";
-
 export default {
   name: "Home",
   data: () => {
-    return {};
+    return {
+      poll_id: "",
+    };
   },
   methods: {
-    getPoll(evt) {
-      let poll = db.getPoll(evt.target.value);
-      if (poll) {
-        this.$router.push({ name: "Poll", params: { poll } });
+    showPoll(evt) {
+      if (this.poll_id.trim().length) {
+        this.$router.push({ name: "Poll", params: { poll_id: this.poll_id } });
       }
     },
   },

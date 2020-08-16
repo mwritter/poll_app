@@ -1,32 +1,45 @@
 <template>
   <main>
-    <ListVotePoll v-if="poll_type == 'ListVotePoll'" :poll="poll" />
-    <h1 v-if="poll_type == ''">No Poll Found</h1>
+    <ListVotePoll v-if="poll.type == 'ListVotePoll'" :poll="poll" />
+    <YesNoPoll v-else-if="poll.type == 'YesNoPoll'" :poll="poll" />
+    <h1 v-else>No Poll Found</h1>
   </main>
 </template>
 
 <script>
 import db from "../db";
-import PollModel from "../Models/PollModel";
 import ListVotePoll from "../components/ListVotePoll";
+import YesNoPoll from "../components/YesNoPoll";
+import ListVotePollModel from "../Models/ListVotePollModel";
+import YesNoPollModel from "../Models/YesNoPollModel";
 export default {
   components: {
     ListVotePoll,
+    YesNoPoll,
   },
-  // props: {
-  //   poll: Object
-  // },
+  props: {
+    poll_id: String,
+  },
   name: "Poll",
   data: () => {
     return {
       poll: {},
-      poll_type: "",
     };
   },
   mounted() {
-    let p = db.getPoll(123);
-    this.poll_type = p.type;
-    this.poll = new PollModel(p);
+    this.poll = db.getPoll(this.poll_id);
+    this.createPollModel(this.poll.type);
+  },
+  methods: {
+    createPollModel(type) {
+      switch (type) {
+        case "ListVotePoll":
+          this.poll = new ListVotePollModel(this.poll);
+          break;
+        case "YesNoPoll":
+          this.poll = new YesNoPollModel(this.poll);
+      }
+    },
   },
 };
 </script>
