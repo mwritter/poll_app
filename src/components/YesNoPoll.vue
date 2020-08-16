@@ -38,17 +38,39 @@ export default {
     let disagree = this.poll.items.find((item) => item.type == "disagree");
     this.agree = agree;
     this.disagree = disagree;
+    this.updateTextPoll();
   },
   methods: {
-    addAgree() {
+    addAgree(evt) {
       if (!this.agree.users.includes(this.user.name)) {
         this.poll.agree(this.user.name);
+        this.updateTextPoll();
       }
     },
-    addDisagree() {
+    addDisagree(evt) {
       if (!this.disagree.users.includes(this.user.name)) {
         this.poll.disagree(this.user.name);
+        this.updateTextPoll();
       }
+    },
+    updateTextPoll() {
+      let agreeText = document.querySelector("#poll-form > .agree");
+      let disagreeText = document.querySelector("#poll-form > .disagree");
+      let agreeUpdateSize = 1 + this.agree.users.length;
+      let disagreeUpdateSize = 1 + this.disagree.users.length;
+      agreeText.style.fontSize =
+        agreeUpdateSize <= 10
+          ? `${agreeUpdateSize}em`
+          : agreeText.style.fontSize;
+      disagreeText.style.fontSize =
+        disagreeUpdateSize <= 10
+          ? `${disagreeUpdateSize}em`
+          : disagreeText.style.fontSize;
+
+      agreeText.style.color =
+        agreeUpdateSize > disagreeUpdateSize ? "lightgreen" : "grey";
+      disagreeText.style.color =
+        agreeUpdateSize < disagreeUpdateSize ? "lightcoral" : "grey";
     },
   },
 };
@@ -72,37 +94,51 @@ export default {
 
 #poll-form {
   display: grid;
+  column-gap: 1rem;
+  padding: 1rem;
   grid-template-columns: 1fr auto 1fr;
   border: 1px solid black;
   border-radius: 20px;
-  padding: 1rem;
   height: 20vh;
 }
 .agree {
   cursor: pointer;
   color: rgba(159, 159, 159);
-  font-size: 10em;
+  font-size: 1em;
   align-self: center;
-}
-.disagree {
-  cursor: pointer;
-  opacity: 0.3;
-  color: rgba(159, 159, 159);
-  align-self: center;
-}
-.agree-users {
-  align-self: end;
-  justify-self: start;
-}
-.disagree-users {
-  align-self: end;
-  justify-self: start;
-  margin-left: 1rem;
+  grid-column: 1/2;
+  grid-row: 1/2;
 }
 .divider {
   border-left: 2px solid rgba(159, 159, 159, 0.5);
   justify-self: center;
-  grid-row: 1/3;
+  align-self: center;
+  height: 80%;
   grid-column: 2/3;
+}
+.disagree {
+  cursor: pointer;
+  font-size: 1em;
+  color: rgba(159, 159, 159);
+  align-self: center;
+  grid-column: 3/4;
+  grid-row: 1/2;
+}
+.agree-users {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-self: start;
+  justify-self: start;
+  grid-column: 1/2;
+  grid-row: 1/2;
+}
+.disagree-users {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-self: start;
+  justify-self: start;
+  margin-left: 1rem;
+  grid-column: 3/4;
+  grid-row: 1/2;
 }
 </style>
