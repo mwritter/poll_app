@@ -277,4 +277,14 @@ export default {
 .disagree-text-input:focus {
   outline: none;
 }
+/* Small Screen */
+@media only screen and (max-width: 700px) {
+  .ListVotePoll {
+    margin-top: 0;
+  }
+
+  #poll-form {
+    width: 100vw;
+  }
+}
 </style>

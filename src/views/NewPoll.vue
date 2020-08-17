@@ -48,6 +48,9 @@ export default {
 </script>
 
 <style scoped>
+main {
+  justify-self: center;
+}
 #new-poll-form {
   display: grid;
   justify-self: center;
@@ -86,7 +89,16 @@ select {
 }
 
 #errorMessage {
-  /* display: none; */
   color: lightcoral;
+}
+
+@media only screen and (max-width: 700px) {
+  main {
+    justify-self: normal;
+  }
+  #new-poll-form {
+    width: 100vw;
+    margin-top: 0;
+  }
 }
 </style>

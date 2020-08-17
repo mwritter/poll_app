@@ -7,10 +7,14 @@
       <div class="divider"></div>
       <div class="disagree" @click="addDisagree">{{disagree.text}}</div>
       <div class="agree-users">
-        <span v-for="(user, idx) in agree.users" :key="`agree-${idx}`">{{user}}</span>
+        <span class="agree-user" v-for="(user, idx) in agree.users" :key="`agree-${idx}`">{{user}}</span>
       </div>
       <div class="disagree-users">
-        <span v-for="(user, idx) in disagree.users" :key="`disagree-${idx}`">{{user}}</span>
+        <span
+          class="disagree-user"
+          v-for="(user, idx) in disagree.users"
+          :key="`disagree-${idx}`"
+        >{{user}}</span>
       </div>
     </div>
   </div>
@@ -59,13 +63,9 @@ export default {
       let agreeUpdateSize = 1 + this.agree.users.length;
       let disagreeUpdateSize = 1 + this.disagree.users.length;
       agreeText.style.fontSize =
-        agreeUpdateSize <= 10
-          ? `${agreeUpdateSize}em`
-          : agreeText.style.fontSize;
+        agreeUpdateSize <= 10 ? `${agreeUpdateSize}em` : "10em";
       disagreeText.style.fontSize =
-        disagreeUpdateSize <= 10
-          ? `${disagreeUpdateSize}em`
-          : disagreeText.style.fontSize;
+        disagreeUpdateSize <= 10 ? `${disagreeUpdateSize}em` : "10em";
 
       agreeText.style.color =
         agreeUpdateSize > disagreeUpdateSize ? "lightgreen" : "grey";
@@ -99,30 +99,33 @@ export default {
   grid-template-columns: 1fr auto 1fr;
   border: 1px solid black;
   border-radius: 20px;
-  height: 20vh;
+  min-height: 20vh;
 }
 .agree {
   cursor: pointer;
   color: rgba(159, 159, 159);
-  font-size: 1em;
+  opacity: 0.8;
   align-self: center;
   grid-column: 1/2;
   grid-row: 1/2;
+  z-index: 1;
 }
 .divider {
   border-left: 2px solid rgba(159, 159, 159, 0.5);
   justify-self: center;
   align-self: center;
-  height: 80%;
+  height: 100%;
   grid-column: 2/3;
 }
 .disagree {
   cursor: pointer;
   font-size: 1em;
   color: rgba(159, 159, 159);
+  opacity: 0.8;
   align-self: center;
   grid-column: 3/4;
   grid-row: 1/2;
+  z-index: 1;
 }
 .agree-users {
   display: grid;
@@ -131,14 +134,75 @@ export default {
   justify-self: start;
   grid-column: 1/2;
   grid-row: 1/2;
+  opacity: 0.3;
 }
 .disagree-users {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   align-self: start;
   justify-self: start;
   margin-left: 1rem;
   grid-column: 3/4;
   grid-row: 1/2;
+  opacity: 0.2;
+}
+
+.disagree-user {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.agree-user {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.disagree-user::before {
+  content: "@";
+}
+.agree-user::before {
+  content: "@";
+}
+/* Small screens */
+@media only screen and (max-width: 700px) {
+  .YesNoPoll {
+    margin-top: 0;
+  }
+
+  #poll-form {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto 1fr;
+    row-gap: 1rem;
+    width: 100vw;
+  }
+
+  .agree {
+    grid-row: 1/2;
+    grid-column: 1/2;
+  }
+
+  .divider {
+    grid-row: 2/3;
+    grid-column: 1/2;
+    border: none;
+    border-bottom: 2px solid rgba(159, 159, 159, 0.5);
+    width: 80%;
+  }
+
+  .disagree {
+    grid-row: 3/4;
+    grid-column: 1/2;
+  }
+  .agree-users {
+    grid-template-columns: repeat(6, 1fr);
+    grid-row: 1/2;
+    grid-column: 1/2;
+  }
+  .disagree-users {
+    grid-template-columns: repeat(6, 1fr);
+    grid-row: 3/4;
+    grid-column: 1/2;
+    margin-left: 0;
+  }
 }
 </style>

@@ -28,7 +28,6 @@
 
 main {
   display: grid;
-  justify-self: center;
   max-width: 1000px;
   width: 70vw;
   gap: 5rem;

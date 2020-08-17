@@ -45,4 +45,16 @@ export default {
 </script>
 
 <style>
+/* Large Screen */
+@media only screen and (min-width: 700px) {
+  main {
+    justify-self: center;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  main {
+    justify-self: normal;
+  }
+}
 </style>

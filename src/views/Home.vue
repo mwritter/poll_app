@@ -35,6 +35,9 @@ export default {
 </script>
 
 <style scoped>
+main {
+  justify-self: center;
+}
 #poll-id-input-div {
   border-bottom: 1px solid black;
   height: 3rem;
