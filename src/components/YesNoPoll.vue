@@ -32,6 +32,7 @@ export default {
     return {
       agree: {},
       disagree: {},
+      lead: '',
       user: {
         name: "mwritter",
       },
@@ -58,6 +59,9 @@ export default {
       }
     },
     updateTextPoll() {
+      // might need to just make some classes and set them instead of
+      // do all this js style updates..
+
       let agreeText = document.querySelector("#poll-form > .agree");
       let disagreeText = document.querySelector("#poll-form > .disagree");
       let agreeUpdateSize = 1 + this.agree.users.length;
@@ -67,8 +71,39 @@ export default {
       disagreeText.style.fontSize =
         disagreeUpdateSize <= 10 ? `${disagreeUpdateSize}em` : "10em";
 
-      agreeText.style.color =
-        agreeUpdateSize > disagreeUpdateSize ? "lightgreen" : "grey";
+      if (agreeUpdateSize <= 10) {
+        agreeText.style.fontSize = `${agreeUpdateSize}em`;
+        agreeText.style.webkitTextStrokeWidth = agreeUpdateSize > 1 ?`${Math.floor(agreeUpdateSize / 2) + 1}px` : '0px';
+      } else {
+        agreeText.style.fontSize = `10em`;
+        agreeText.style.webkitTextStrokeWidth = `6px`;
+      }
+
+      if (disagreeUpdateSize <= 10) {
+        disagreeText.style.fontSize = `${disagreeUpdateSize}em`;
+        disagreeText.style.webkitTextStrokeWidth = disagreeUpdateSize > 1 ?`${Math.floor(disagreeUpdateSize / 2) + 1}px` : '0px';
+      } else {
+        disagreeText.style.fontSize = `10em`;
+        disagreeText.style.webkitTextStrokeWidth = `6px`;
+      }
+
+      if (agreeUpdateSize > disagreeUpdateSize) {
+          agreeText.style.color = 'lightgreen';
+          agreeText.style.webkitTextStrokeColor = 'green';
+          disagreeText.style.color = 'gray';
+          disagreeText.style.webkitTextStrokeColor = '';
+      } else if (agreeUpdateSize < disagreeUpdateSize) {
+          agreeText.style.color = 'gray';
+          agreeText.style.webkitTextStrokeColor = '';
+          disagreeText.style.color = 'lightcoral';
+          disagreeText.style.webkitTextStrokeColor = 'red';
+      } else {
+        agreeText.style.color = 'gray';
+        agreeText.style.webkitTextStrokeColor = '';
+        disagreeText.style.color = 'gray';
+        disagreeText.style.webkitTextStrokeColor = '';
+      }
+
       disagreeText.style.color =
         agreeUpdateSize < disagreeUpdateSize ? "lightcoral" : "grey";
     },
@@ -99,12 +134,12 @@ export default {
   grid-template-columns: 1fr auto 1fr;
   border: 1px solid black;
   border-radius: 20px;
-  min-height: 20vh;
+  min-height: 10rem;
 }
 .agree {
   cursor: pointer;
   color: rgba(159, 159, 159);
-  opacity: 0.8;
+  opacity: 0.3;
   align-self: center;
   grid-column: 1/2;
   grid-row: 1/2;
@@ -121,7 +156,7 @@ export default {
   cursor: pointer;
   font-size: 1em;
   color: rgba(159, 159, 159);
-  opacity: 0.8;
+  opacity: 0.3;
   align-self: center;
   grid-column: 3/4;
   grid-row: 1/2;
@@ -129,22 +164,26 @@ export default {
 }
 .agree-users {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  justify-items: center;
+  grid-template-columns: repeat( 4, 1fr);
+  width: 100%;
   align-self: start;
-  justify-self: start;
+  justify-self: center;
   grid-column: 1/2;
   grid-row: 1/2;
-  opacity: 0.3;
+  opacity: 0.5;
 }
 .disagree-users {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+  grid-template-columns: repeat( auto-fill, minmax(4rem, 1fr));
+  width: 100%;
   align-self: start;
-  justify-self: start;
+  justify-self: center;
   margin-left: 1rem;
   grid-column: 3/4;
   grid-row: 1/2;
-  opacity: 0.2;
+  opacity: 0.5;
 }
 
 .disagree-user {
@@ -170,10 +209,12 @@ export default {
   }
 
   #poll-form {
+    justify-self: end;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr auto 1fr;
     row-gap: 1rem;
     width: 100vw;
+    min-height: 20rem;
   }
 
   .agree {
@@ -194,15 +235,21 @@ export default {
     grid-column: 1/2;
   }
   .agree-users {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat( 4, 1fr);
+    justify-items: start;
+    gap: 0.5rem;
+    width: 100%;
     grid-row: 1/2;
     grid-column: 1/2;
   }
   .disagree-users {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat( 4, 1fr);
     grid-row: 3/4;
     grid-column: 1/2;
     margin-left: 0;
+    justify-items: start;
+    gap: 0.5rem;
+    width: 100%;
   }
 }
 </style>

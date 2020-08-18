@@ -10,13 +10,11 @@ export default {
                     type: 'agree',
                     text: 'YES',
                     users: []
-                    // users: ['mwritter', 'vrritter', 'dtayler', 'jtracy', 'mwritter', 'vrritter', 'dtayler', 'jtracy', 'mwritter', 'vrritter', 'dtayler', 'jtracy', 'mwritter', 'vrritter', 'dtayler', 'jtracy']
                 },
                 {
                     type: 'disagree',
                     text: 'NO',
                     users: []
-                    // users: ['vrritter', 'dtayler', 'jtracy', 'vrritter', 'dtayler', 'jtracy']
                 }
             ]
             // type: "ListVotePoll",
