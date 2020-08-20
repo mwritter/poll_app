@@ -27,17 +27,19 @@ export default {
     };
   },
   mounted() {
-    this.poll = db.getPoll(this.poll_id);
-    this.createPollModel(this.poll.type);
+    let poll = db.getPoll(this.poll_id);
+    if (poll) {
+      this.createPollModel(poll);
+    }
   },
   methods: {
-    createPollModel(type) {
-      switch (type) {
+    createPollModel(poll) {
+      switch (poll.type) {
         case "ListVotePoll":
-          this.poll = new ListVotePollModel(this.poll);
+          this.poll = new ListVotePollModel(poll);
           break;
         case "YesNoPoll":
-          this.poll = new YesNoPollModel(this.poll);
+          this.poll = new YesNoPollModel(poll);
       }
     },
   },

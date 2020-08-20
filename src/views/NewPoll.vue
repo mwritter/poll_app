@@ -1,47 +1,56 @@
 <template>
   <main>
-    <div id="new-poll-form">
+    <form id="new-poll-form">
       <p>start a new poll</p>
-      <div id="poll-title-div">
-        <input v-model="title" type="text" placeholder="question..." />
+      <div class="poll-title-div">
+        <span class="label">Question</span>
+        <div id="poll-title-input-div">
+          <input v-model="title" type="text" required />
+          <span class="btn enter">Enter</span>
+        </div>
       </div>
       <div class="poll-type">
         <p>pick a poll type</p>
-        <select v-model="type" name="type" id>
+        <select v-model="type" name="type" required>
           <option
-            value="list-vote-poll"
+            value="ListVotePoll"
             title="List style where participants add a short input to the question and vote on each input"
           >Short Input</option>
-          <option value="yes-no-poll" title="umm yeah.. this is a yes or no poll">Yes/No</option>
+          <option value="YesNoPoll" title="umm yeah.. this is a yes or no poll">Yes/No</option>
         </select>
       </div>
-      <p @click="onSubmit" class="submit">Submit</p>
-    </div>
+      <button type="submit" @click.prevent="onSubmit" class="submit">Submit</button>
+    </form>
     <div v-if="errorMessage" id="errorMessage">{{errorMessage}}</div>
   </main>
 </template>
 
 <script>
+import db from "../db";
+
 export default {
   name: "NewPoll",
   data: () => {
     return {
       title: "",
-      type: "list-vote-poll",
+      type: "ListVotePoll",
       errorMessage: null,
     };
   },
   methods: {
     onVerifyForm() {
       if (!this.title.trim().length || !this.type.length) {
-        this.errorMessage =
-          "Both those fields up there need to have a value. The poll type is pretty much set so please add some text so the other people know what the poll is for.";
+        this.errorMessage = "Both those fields up there need to have a value.";
       } else {
         this.errorMessage = null;
       }
+      return !this.errorMessage;
     },
     onSubmit() {
-      this.onVerifyForm();
+      if (!this.onVerifyForm()) {
+        return;
+      }
+      db.addPoll(this);
     },
   },
 };
@@ -62,15 +71,27 @@ main {
   border: 1px solid black;
   border-radius: 20px;
 }
-#poll-title-div {
+
+.poll-title-div {
+  display: flex;
+  margin: 0 1rem;
+  flex-direction: column;
+  color: rgb(159, 159, 159);
+}
+
+.label {
+  align-self: start;
+}
+
+#poll-title-input-div {
+  display: grid;
+  grid-template-columns: 1fr auto;
   border-bottom: 1px solid black;
-  height: 3rem;
 }
 input {
   border: none;
   width: 100%;
   height: 100%;
-  text-align: center;
   font-size: 1.3em;
 }
 
@@ -90,6 +111,24 @@ select {
 
 #errorMessage {
   color: lightcoral;
+}
+
+button {
+  background: none;
+  border: none;
+  font-size: inherit;
+  color: inherit;
+}
+
+button:focus {
+  outline: none;
+}
+.btn {
+  padding: 1rem;
+  place-content: center;
+  border-radius: 20px;
+  font-size: 1.3em;
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 700px) {

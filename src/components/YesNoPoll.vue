@@ -3,9 +3,9 @@
     <div id="poll-id-div">{{poll.id}}</div>
     <div>{{poll.title}}</div>
     <div id="poll-form">
-      <div class="agree" @click="addAgree">{{agree.text}}</div>
+      <div class="agree" @click="addAgree">{{agree.text || `YES`}}</div>
       <div class="divider"></div>
-      <div class="disagree" @click="addDisagree">{{disagree.text}}</div>
+      <div class="disagree" @click="addDisagree">{{disagree.text || `NO`}}</div>
       <div class="agree-users">
         <span class="agree-user" v-for="(user, idx) in agree.users" :key="`agree-${idx}`">{{user}}</span>
       </div>
@@ -41,8 +41,8 @@ export default {
   mounted() {
     let agree = this.poll.items.find((item) => item.type == "agree");
     let disagree = this.poll.items.find((item) => item.type == "disagree");
-    this.agree = agree;
-    this.disagree = disagree;
+    this.agree = agree || {};
+    this.disagree = disagree || {};
     this.updateTextPoll();
   },
   methods: {
@@ -61,7 +61,9 @@ export default {
     updateTextPoll() {
       // might need to just make some classes and set them instead of
       // do all this js style updates..
-
+      if (!this.agree.users || !this.disagree.users) {
+        return;
+      }
       let agreeText = document.querySelector("#poll-form > .agree");
       let disagreeText = document.querySelector("#poll-form > .disagree");
       let agreeUpdateSize = 1 + this.agree.users.length;

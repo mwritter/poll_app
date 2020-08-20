@@ -1,5 +1,8 @@
 <template>
   <div class="ListVotePoll">
+    <transition name="lead" mode="in-out">
+      <div v-if="lead.text" class="lead">{{lead.text}}</div>
+    </transition>
     <div id="poll-id-div">{{poll.id}}</div>
     <div id="poll-form">
       <p id="question">{{poll.title}}</p>
@@ -33,17 +36,20 @@
       id="user-input-form"
       title="👾 if you CTRL + click this input Ill let you set the agree/disagree text"
     >
-      <div id="user-input-div">
-        <input
-          @click.ctrl="addExtraControls = !addExtraControls"
-          @keyup.enter="onSubmit"
-          autocomplete="off"
-          v-model="user_input"
-          id="user-input"
-          type="text"
-          placeholder="add your input and press enter"
-        />
-      </div>
+       <div class="user-input-div">
+           <span class="label">Your Input</span>
+         <div id="user-input-text-div">
+           <input
+             @click.ctrl="addExtraControls = !addExtraControls"
+             @keyup.enter="onSubmit"
+             autocomplete="off"
+             v-model="user_input"
+             id="user-input"
+             type="text"
+           />
+           <span class="btn enter">Enter</span>
+         </div>
+       </div>
       <div v-if="addExtraControls" class="extra-controls">
         <input
           class="agree-text-input"
@@ -87,6 +93,30 @@ export default {
         name: "mwritter",
       },
     };
+  },
+  computed: {
+    lead() {
+      if (!this.items.length) {
+        return {};
+      }
+      let max = 0;
+      let lead = null;
+      this.items.map((item) => {
+        if (item.agree.users.length > max) {
+          max = item.agree.users.length;
+        }
+      });
+      if (max > 0) {
+        lead = this.items.filter((item) => {
+          return item.agree.users.length == max;
+        });
+      }
+      if (lead && lead.length == 1) {
+        return lead.pop();
+      } else {
+        return {};
+      }
+    },
   },
   mounted() {
     this.items = this.poll.items;
@@ -176,6 +206,9 @@ export default {
   border: 1px solid black;
   border-radius: 20px;
   padding: 1rem;
+  z-index: 1;
+  grid-row: 2/3;
+  grid-column: 1/2;
 }
 
 .poll-item {
@@ -241,17 +274,31 @@ export default {
   gap: 1rem;
 }
 
-#user-input-div {
+.user-input-div {
+  display: flex;
+  margin: 0 1rem;
+  flex-direction: column;
+  color: rgb(159, 159, 159);
+}
+
+.label {
+  align-self: start;
+}
+
+#user-input-text-div {
+  display: grid;
+  grid-template-columns: 1fr auto;
   border-bottom: 1px solid black;
-  height: 3rem;
+  z-index: 1;
 }
 
 #user-input {
   border: none;
   width: 100%;
   height: 100%;
-  text-align: center;
   font-size: 1.3em;
+  z-index: 1;
+  background: transparent;
 }
 
 #user-input:focus {
@@ -277,6 +324,38 @@ export default {
 .disagree-text-input:focus {
   outline: none;
 }
+.lead {
+  grid-row: 2/3;
+  grid-column: 1/2;
+  align-self: center;
+  z-index: -1;
+  transform: scale(5);
+  opacity: 0.1;
+}
+
+.lead-enter,
+.lead-leave-to {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.lead-enter-active,
+.lead-leave-active {
+  transition: all ease-in-out 1s;
+}
+
+.lead-enter-to {
+  transform: scale(5);
+}
+
+.btn {
+  padding: 1rem;
+  place-content: center;
+  border-radius: 20px;
+  font-size: 1.3em;
+  cursor: pointer;
+}
+
 /* Small Screen */
 @media only screen and (max-width: 700px) {
   .ListVotePoll {
