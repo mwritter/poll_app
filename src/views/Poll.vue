@@ -2,7 +2,8 @@
   <main>
     <ListVotePoll v-if="poll.type == 'ListVotePoll'" :poll="poll" />
     <YesNoPoll v-else-if="poll.type == 'YesNoPoll'" :poll="poll" />
-    <h1 v-else>No Poll Found</h1>
+    <h1 v-if="message">{{message}}</h1>
+
   </main>
 </template>
 
@@ -19,27 +20,49 @@ export default {
   },
   props: {
     poll_id: String,
+    poll_data: Object
   },
   name: "Poll",
   data: () => {
     return {
-      poll: {},
+      message: false,
+      poll: {}
     };
   },
   mounted() {
-    let poll = db.getPoll(this.poll_id);
-    if (poll) {
-      this.createPollModel(poll);
+    this.message = "Loading...";
+    if (this.poll_id) {
+      this.getPoll(this.poll_id);
+    } else if (this.poll_data) {
+      this.createPollModel(this.poll_data);
     }
+    
   },
   methods: {
-    createPollModel(poll) {
-      switch (poll.type) {
+    getPoll(id) {
+      db.get(this.poll_id).then(pollData => {
+        if (pollData) {
+          this.message = false;
+          this.createPollModel(pollData);
+        } else {
+          this.message = 'No Poll Found'
+        }
+      })
+    },
+    createPollModel(pollData) {
+      if (!pollData.type) {
+        this.message = 'No Poll Model Found for type givin.';
+        return;
+      }
+      switch (pollData.type) {
         case "ListVotePoll":
-          this.poll = new ListVotePollModel(poll);
+          this.poll = new ListVotePollModel(pollData);
+          this.message = false;
           break;
         case "YesNoPoll":
-          this.poll = new YesNoPollModel(poll);
+          this.poll = new YesNoPollModel(pollData);
+          this.message = false;
+          break;
       }
     },
   },

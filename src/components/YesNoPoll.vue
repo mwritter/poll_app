@@ -39,8 +39,8 @@ export default {
     };
   },
   mounted() {
-    let agree = this.poll.items.find((item) => item.type == "agree");
-    let disagree = this.poll.items.find((item) => item.type == "disagree");
+    let agree = this.poll.items['agree'];
+    let disagree = this.poll.items['disagree'];
     this.agree = agree || {};
     this.disagree = disagree || {};
     this.updateTextPoll();

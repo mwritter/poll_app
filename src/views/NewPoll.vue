@@ -27,6 +27,8 @@
 
 <script>
 import db from "../db";
+import ListVotePollModel from "../Models/ListVotePollModel";
+import YesNoPollModel from "../Models/YesNoPollModel";
 
 export default {
   name: "NewPoll",
@@ -35,6 +37,7 @@ export default {
       title: "",
       type: "ListVotePoll",
       errorMessage: null,
+      poll: null
     };
   },
   methods: {
@@ -50,8 +53,42 @@ export default {
       if (!this.onVerifyForm()) {
         return;
       }
-      db.addPoll(this);
+      this.poll = {
+        title: this.title,
+        type: this.type
+      }
+      this.poll = {
+        title: this.title,
+        type: this.type,
+        items: this.getDefaultItems()
+      }
+      if (this.poll) {
+        db.create(this.poll).then(result => {
+          this.poll.id = result.id;
+          this.$router.push({ name: "Poll", params: { poll_data: this.poll } });
+        });
+      }
     },
+    getDefaultItems() {
+      let items = [];
+      switch (this.type) {
+        case "YesNoPoll":
+          items = {
+                agree: {
+                    type: 'agree',
+                    text: 'YES',
+                    users: []
+                },
+                disagree: {
+                    type: 'disagree',
+                    text: 'NO',
+                    users: []
+                }
+            }
+          break;
+      }
+      return items;
+    }
   },
 };
 </script>

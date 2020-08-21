@@ -1,5 +1,7 @@
-// dummy db
+import db from '../src/firebaseConfig';
+
 export default {
+    collection: db.firestore().collection('polls'),
     data: {
         polls: [
             {
@@ -40,16 +42,36 @@ export default {
             }
         ]
     },
-    getPoll(id) {
-        //for now if this fake db doesnt have the poll just send the first one
-        let found  = this.data.polls.find(poll => poll.id == id);
-        if (found) {
-            return found;
-        }
-        let fake = this.data.polls[0];
-        fake.id = id;
-        return fake;
+    async get(id) {
+        let poll = null;
+        const ref = this.collection.doc(id);
+        await ref.get().then((doc) => {
+            if (doc.exists) {
+                poll = doc.data();
+                poll.id = doc.id;
+            }
+        });
+        return poll;
     },
+
+    async update(id, payload) {
+
+    },
+
+    async create(payload) {
+        let result = {};
+        await this.collection
+            .add(payload)
+            .then((res) => {
+                console.log('Successfully Written!')
+                result = res;
+            })
+            .catch(error => {
+                console.log('Error: ' + error);
+            });
+        return result;
+    },
+
     addPoll(poll) {
         let id = this.data.polls.length + 1;
         this.data.polls.push({

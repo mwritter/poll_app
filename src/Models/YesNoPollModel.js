@@ -1,8 +1,8 @@
 class YesNoPoll {
-    constructor({ id, title, items, type }) {
-        this.id = id
-        this.title = title;
-        this.items = items;
+    constructor(args) {
+        this.id = args.id;
+        this.title = args.title;
+        this.items = args.items;
         this.type = 'YesNoPoll';
     }
 
@@ -21,14 +21,25 @@ class YesNoPoll {
     }
 
     getAgree() {
-        let agree = this.items.find(item => item.type == 'agree');
-        return agree;
+        return this.items.agree;
     }
     getDisagree() {
-        let disagree = this.items.find(item => item.type == 'disagree');
-        return disagree;
+        return this.items.disagree;
     }
-
+    generateDefaultItems() {
+        return {
+            agree: {
+                type: 'agree',
+                text: 'YES',
+                users: []
+            },
+            disagree: {
+                type: 'disagree',
+                text: 'NO',
+                users: []
+            }
+        }
+    }
 }
 
 export default YesNoPoll;

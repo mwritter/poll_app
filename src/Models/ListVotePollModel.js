@@ -1,10 +1,10 @@
 import db from '../db';
 class ListVotePollModel {
 
-    constructor({ id, title, items, type }) {
-        this.id = id
-        this.title = title;
-        this.items = items;
+    constructor(args) {
+        this.id = args.id;
+        this.title = args.title;
+        this.items = args.items;
         this.type = 'ListVotePoll';
     }
 
@@ -38,6 +38,9 @@ class ListVotePollModel {
     getDisagree(text) {
         let item = this.items.find(item => item.text == text);
         return item.disagree;
+    }
+    generateDefaultItems() {
+        return [];
     }
 }
 
